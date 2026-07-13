@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://wargamer7070.github.io/ict-portaal-stichting/sitemap.xml

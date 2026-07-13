@@ -1,0 +1,48 @@
+[
+  {
+    "id": "all",
+    "name": "Alle scholen",
+    "shortName": "Stichting",
+    "description": "Algemene informatie voor alle scholen binnen de stichting.",
+    "theme": { "primary": "#0f6f86", "accent": "#e76f2e" },
+    "domains": [],
+    "portals": []
+  },
+  {
+    "id": "vszutphen",
+    "name": "De Vrijeschool Zutphen",
+    "shortName": "Vrijeschool Zutphen",
+    "description": "ICT-informatie voor leerlingen, medewerkers en ouders van De Vrijeschool Zutphen.",
+    "theme": { "primary": "#168aa0", "accent": "#e76f2e" },
+    "domains": ["vszutphen.nl"],
+    "portals": [
+      { "id": "student", "label": "Leerlingenportaal", "description": "Roosters, leerlinginformatie en diensten.", "url": "", "audience": "Leerlingen" },
+      { "id": "staff", "label": "Medewerkersportaal", "description": "Interne informatie en medewerkersdiensten.", "url": "", "audience": "Medewerkers en docenten" },
+      { "id": "schedule", "label": "Rooster en uitval", "description": "Open het gepubliceerde rooster.", "url": "https://roostervszutphen.nl", "audience": "Iedereen" }
+    ]
+  },
+  {
+    "id": "berkel",
+    "name": "De Berkel",
+    "shortName": "De Berkel",
+    "description": "ICT-informatie voor leerlingen, medewerkers en ouders van De Berkel.",
+    "theme": { "primary": "#4f7656", "accent": "#d48735" },
+    "domains": ["berkel.nl"],
+    "portals": [
+      { "id": "student", "label": "Leerlingenportaal", "description": "Leerlinginformatie en digitale diensten.", "url": "", "audience": "Leerlingen" },
+      { "id": "staff", "label": "Medewerkersportaal", "description": "Interne informatie en medewerkersdiensten.", "url": "", "audience": "Medewerkers en docenten" }
+    ]
+  },
+  {
+    "id": "zonnewende",
+    "name": "De Zonnewende",
+    "shortName": "De Zonnewende",
+    "description": "ICT-informatie voor leerlingen, medewerkers en ouders van De Zonnewende.",
+    "theme": { "primary": "#9a6b22", "accent": "#d95f32" },
+    "domains": ["zonnewende.nl"],
+    "portals": [
+      { "id": "student", "label": "Leerlingenportaal", "description": "Leerlinginformatie en digitale diensten.", "url": "", "audience": "Leerlingen" },
+      { "id": "staff", "label": "Medewerkersportaal", "description": "Interne informatie en medewerkersdiensten.", "url": "", "audience": "Medewerkers en docenten" }
+    ]
+  }
+]

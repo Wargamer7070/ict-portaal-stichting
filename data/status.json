@@ -1,0 +1,26 @@
+[
+  {
+    "id": "website",
+    "service": "ICT-portaal",
+    "status": "operationeel",
+    "message": "De openbare website is beschikbaar.",
+    "schools": ["all"],
+    "updated": "2026-07-13T13:00:00+02:00"
+  },
+  {
+    "id": "rooster-vsz",
+    "service": "Roosterpublicatie Vrijeschool Zutphen",
+    "status": "operationeel",
+    "message": "De roosterwebsite is gekoppeld.",
+    "schools": ["vszutphen"],
+    "updated": "2026-07-13T13:00:00+02:00"
+  },
+  {
+    "id": "manual-library",
+    "service": "Handleidingenbibliotheek",
+    "status": "inrichting",
+    "message": "De nieuwe bibliotheek bevat eerst conceptverwijzingen. Bestaande documenten worden daarna gekoppeld.",
+    "schools": ["all"],
+    "updated": "2026-07-13T13:00:00+02:00"
+  }
+]

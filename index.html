@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Centraal ICT-portaal voor De Vrijeschool Zutphen, De Berkel en De Zonnewende.">
+  <meta name="theme-color" content="#0f6f86">
+  <title>Stichtingbreed ICT-portaal</title>
+  <link rel="icon" href="assets/images/logo-mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <script src="assets/js/core.js" defer></script>
+  <script src="assets/js/home.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Ga naar de inhoud</a>
+<div class="error-banner" data-page-error hidden>De websitegegevens konden niet worden geladen. Vernieuw de pagina of probeer het later opnieuw.</div>
+<header class="site-header">
+  <div class="container header-row">
+    <a class="brand" href="index.html" aria-label="ICT-portaal startpagina">
+      <img src="assets/images/logo-mark.svg" alt="">
+      <span><strong>ICT-portaal</strong><span>Voor drie scholen, één ingang</span></span>
+    </a>
+    <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="main-navigation">Menu</button>
+    <nav class="main-nav" id="main-navigation" data-main-nav aria-label="Hoofdnavigatie">
+      <a href="index.html" data-nav-link>Start</a>
+      <a href="handleidingen.html" data-nav-link>Handleidingen</a>
+      <a href="aankondigingen.html" data-nav-link>Berichten</a>
+      <a href="status.html" data-nav-link>Status</a>
+      <a href="portalen.html" data-nav-link>Portalen</a>
+      <a href="over.html" data-nav-link>Over</a>
+    </nav>
+    <div class="school-control">
+      <label for="school-select">Kies je school</label>
+      <select id="school-select" data-school-select aria-label="Kies je school"></select>
+    </div>
+  </div>
+</header>
+<main id="main">
+  <section class="hero">
+    <div class="container hero-content">
+      <p class="eyebrow">ICT voor <span data-school-name>de stichting</span></p>
+      <h1>Vind snel de juiste ICT-hulp.</h1>
+      <p class="hero-lead" data-school-description>Eén centrale plek voor openbare ICT-informatie, handleidingen, storingen en toegang tot schoolportalen.</p>
+      <div class="button-row">
+        <a class="button" href="handleidingen.html">Zoek een handleiding</a>
+        <a class="button button-secondary" href="portalen.html">Open je portaal</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="container quick-grid" aria-label="Snel naar">
+      <a class="quick-card" href="handleidingen.html">
+        <span class="quick-icon" aria-hidden="true">📘</span>
+        <h2>Handleidingen</h2>
+        <p>Zoek hulp bij accounts, Nivo, wifi, printen en roosters.</p>
+      </a>
+      <a class="quick-card" href="aankondigingen.html">
+        <span class="quick-icon" aria-hidden="true">📣</span>
+        <h2>Actuele berichten</h2>
+        <p>Lees openbare mededelingen voor jouw school.</p>
+      </a>
+      <a class="quick-card" href="status.html">
+        <span class="quick-icon" aria-hidden="true">🟢</span>
+        <h2>Storingen en status</h2>
+        <p>Controleer eerst of een dienst een bekende storing heeft.</p>
+      </a>
+      <a class="quick-card" href="portalen.html">
+        <span class="quick-icon" aria-hidden="true">🔑</span>
+        <h2>Schoolportalen</h2>
+        <p>Ga naar het leerlingen-, medewerkers- of roosterportaal.</p>
+      </a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container grid-two">
+      <div>
+        <div class="section-heading">
+          <div><p class="eyebrow">Actueel</p><h2>Laatste berichten</h2></div>
+          <a class="button button-outline button-small" href="aankondigingen.html">Alle berichten</a>
+        </div>
+        <div class="notice-list" data-home-announcements aria-live="polite"></div>
+      </div>
+      <aside class="panel">
+        <div class="section-heading">
+          <div><p class="eyebrow">Beschikbaarheid</p><h2>Dienststatus</h2></div>
+        </div>
+        <div class="status-list" data-home-status aria-live="polite"></div>
+        <a class="button button-outline button-small" href="status.html">Volledig overzicht</a>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container grid-two">
+      <div>
+        <p class="eyebrow">Veilige opzet</p>
+        <h2>Openbare website, afgeschermde schoolportalen</h2>
+        <p>Deze GitHub Pages-website bevat alleen informatie die openbaar mag zijn. Leerlingen- en medewerkersgegevens horen achter de bestaande Google Workspace- of Microsoft-aanmelding.</p>
+        <p>Medewerkers en docenten vallen onder hetzelfde beveiligingsniveau. De website houdt hun categorieën wel apart voor navigatie en inhoud.</p>
+      </div>
+      <div class="security-box">
+        <h2>Belangrijk voor beheer</h2>
+        <p>Plaats nooit interne links, persoonsgegevens, wachtwoorden, tokens of medewerkersdocumenten in deze repository. Statische bestanden zijn voor iedere bezoeker opvraagbaar.</p>
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div><h2>ICT-portaal</h2><p>Openbare ICT-informatie voor de scholen binnen de stichting.</p></div>
+    <div><h2>Scholen</h2><div class="footer-links"><span>De Vrijeschool Zutphen</span><span>De Berkel</span><span>De Zonnewende</span></div></div>
+    <div><h2>Snel naar</h2><div class="footer-links"><a href="handleidingen.html">Handleidingen</a><a href="status.html">Dienststatus</a><a href="portalen.html">Portalen</a></div></div>
+  </div>
+  <div class="container footer-bottom">© <span data-current-year></span> · Stichtingbreed ICT-portaal</div>
+</footer>
+</body>
+</html>

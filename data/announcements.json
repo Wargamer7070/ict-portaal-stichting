@@ -1,0 +1,24 @@
+[
+  {
+    "id": "welcome-2026",
+    "title": "Welkom op het nieuwe ICT-portaal",
+    "summary": "Deze website bundelt openbare ICT-informatie voor de scholen binnen de stichting.",
+    "body": "Kies bovenaan je school. Je ziet daarna passende handleidingen, berichten, storingen en portaalverwijzingen.",
+    "schools": ["all"],
+    "audiences": ["Iedereen"],
+    "priority": "normaal",
+    "published": "2026-07-13",
+    "expires": ""
+  },
+  {
+    "id": "password-help",
+    "title": "Hulp bij wachtwoorden en tweestapsverificatie",
+    "summary": "De eerste openbare handleidingen staan klaar onder Account en beveiliging.",
+    "body": "Je vindt stappen voor wachtwoordherstel, Google Authenticator en veilige toegang tot je schoolaccount.",
+    "schools": ["all"],
+    "audiences": ["Leerlingen", "Medewerkers", "Docenten"],
+    "priority": "hoog",
+    "published": "2026-07-13",
+    "expires": ""
+  }
+]

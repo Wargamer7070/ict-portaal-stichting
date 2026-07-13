@@ -1,0 +1,22 @@
+{
+  "foundation": {
+    "name": "Stichtingbreed ICT-portaal",
+    "shortName": "ICT-portaal",
+    "description": "Eén centrale plek voor openbare ICT-informatie, handleidingen, storingen en toegang tot schoolportalen.",
+    "supportEmail": "",
+    "privacyUrl": "",
+    "lastUpdated": "2026-07-13"
+  },
+  "features": {
+    "showStatus": true,
+    "showAnnouncements": true,
+    "showManuals": true,
+    "showPortalLinks": true
+  },
+  "dataSources": {
+    "announcements": "data/announcements.json",
+    "manuals": "data/manuals.json",
+    "status": "data/status.json",
+    "schools": "data/schools.json"
+  }
+}

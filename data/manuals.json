@@ -1,0 +1,79 @@
+[
+  {
+    "id": "password-forgotten",
+    "title": "Wachtwoord vergeten",
+    "summary": "Stappen om weer toegang tot je schoolaccount te krijgen.",
+    "category": "Account en beveiliging",
+    "schools": ["all"],
+    "audiences": ["Leerlingen", "Medewerkers", "Docenten"],
+    "keywords": ["wachtwoord", "inloggen", "account", "reset"],
+    "url": "",
+    "status": "concept"
+  },
+  {
+    "id": "google-authenticator",
+    "title": "Google Authenticator instellen",
+    "summary": "Uitleg voor het activeren en gebruiken van tweestapsverificatie.",
+    "category": "Account en beveiliging",
+    "schools": ["vszutphen", "berkel"],
+    "audiences": ["Medewerkers", "Docenten"],
+    "keywords": ["google", "authenticator", "2fa", "tweestapsverificatie"],
+    "url": "",
+    "status": "concept"
+  },
+  {
+    "id": "nivo-students",
+    "title": "Nivo voor leerlingen",
+    "summary": "Inloggen, navigeren en veelvoorkomende handelingen binnen Nivo.",
+    "category": "Nivo",
+    "schools": ["vszutphen"],
+    "audiences": ["Leerlingen"],
+    "keywords": ["nivo", "leerling", "portaal"],
+    "url": "",
+    "status": "concept"
+  },
+  {
+    "id": "nivo-staff",
+    "title": "Nivo voor medewerkers",
+    "summary": "Praktische uitleg voor medewerkers en docenten die Nivo gebruiken.",
+    "category": "Nivo",
+    "schools": ["vszutphen"],
+    "audiences": ["Medewerkers", "Docenten"],
+    "keywords": ["nivo", "medewerker", "docent"],
+    "url": "",
+    "status": "concept"
+  },
+  {
+    "id": "wifi-basics",
+    "title": "Verbinden met het schoolnetwerk",
+    "summary": "Controleer je account, wifi-instellingen en de eerste stappen bij verbindingsproblemen.",
+    "category": "Netwerk en wifi",
+    "schools": ["all"],
+    "audiences": ["Leerlingen", "Medewerkers", "Docenten"],
+    "keywords": ["wifi", "internet", "netwerk", "verbinding"],
+    "url": "",
+    "status": "concept"
+  },
+  {
+    "id": "printing-basics",
+    "title": "Printen op school",
+    "summary": "Algemene stappen voor printers, wachtrijen en het controleren van je printopdracht.",
+    "category": "Printen",
+    "schools": ["all"],
+    "audiences": ["Medewerkers", "Docenten"],
+    "keywords": ["printer", "printen", "papercut", "wachtrij"],
+    "url": "",
+    "status": "concept"
+  },
+  {
+    "id": "schedule-publication",
+    "title": "Rooster en roosteruitval bekijken",
+    "summary": "Open het gepubliceerde rooster en controleer of je de nieuwste versie ziet.",
+    "category": "Roosters",
+    "schools": ["vszutphen"],
+    "audiences": ["Leerlingen", "Medewerkers", "Docenten", "Ouders"],
+    "keywords": ["rooster", "untis", "uitval", "wijziging"],
+    "url": "https://roostervszutphen.nl",
+    "status": "published"
+  }
+]
