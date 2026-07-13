@@ -1,0 +1,8 @@
+{
+  "mode": "apps-script",
+  "webAppUrl": "",
+  "enabledSchools": ["vszutphen"],
+  "testDomain": "vszutphen.nl",
+  "cacheSeconds": 60,
+  "status": "setup-required"
+}
