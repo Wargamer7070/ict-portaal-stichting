@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <base target="_top">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root { --ink:#17333b; --muted:#62737a; --line:#d9e3e5; --primary:#0f6f86; --accent:#e76f2e; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:#f5f9f9; color:var(--ink); font-family:Arial,sans-serif; line-height:1.55; }
+    main { width:min(100% - 2rem,760px); margin:3rem auto; }
+    .card { background:#fff; border:1px solid var(--line); border-radius:18px; padding:1.5rem; box-shadow:0 16px 42px rgba(15,55,65,.08); }
+    .eyebrow { color:var(--accent); font-size:.78rem; font-weight:700; text-transform:uppercase; letter-spacing:.1em; }
+    h1 { margin:.4rem 0 1rem; font-size:clamp(2rem,6vw,3.6rem); line-height:1.1; }
+    .status { padding:1rem; border-radius:12px; margin:1rem 0; }
+    .ok { background:#e9f6ee; border:1px solid #add3bb; }
+    .no { background:#fff0ea; border:1px solid #edc0aa; }
+    .roles { display:flex; flex-wrap:wrap; gap:.5rem; padding:0; list-style:none; }
+    .roles li { padding:.35rem .65rem; border-radius:999px; background:#eaf3f5; color:var(--primary); font-weight:700; }
+    .button { display:inline-block; margin-top:1rem; padding:.75rem 1rem; border-radius:10px; background:var(--primary); color:#fff; text-decoration:none; font-weight:700; }
+    dl { display:grid; grid-template-columns:max-content 1fr; gap:.4rem 1rem; }
+    dt { font-weight:700; } dd { margin:0; color:var(--muted); overflow-wrap:anywhere; }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="card">
+      <p class="eyebrow">Google Workspace-test</p>
+      <h1><?= config.school.name ?></h1>
+
+      <? if (result.allowed) { ?>
+        <div class="status ok"><strong>Toegang bevestigd.</strong> Je school en rol zijn vastgesteld via Google Workspace.</div>
+        <dl>
+          <dt>Account</dt><dd><?= result.email ?></dd>
+          <dt>School</dt><dd><?= result.schoolName ?></dd>
+        </dl>
+        <h2>Toegekende rollen</h2>
+        <ul class="roles">
+          <? result.roles.forEach(function(role) { ?>
+            <li><?= role ?></li>
+          <? }); ?>
+        </ul>
+        <p>In de volgende fase levert deze poort alleen inhoud en links terug die bij deze rollen horen.</p>
+      <? } else { ?>
+        <div class="status no"><strong>Geen toegang.</strong> <?= result.reason ?></div>
+        <? if (result.email) { ?>
+          <dl><dt>Account</dt><dd><?= result.email ?></dd></dl>
+        <? } ?>
+      <? } ?>
+
+      <a class="button" href="<?= config.publicPortalUrl ?>">Terug naar het openbare ICT-portaal</a>
+    </section>
+  </main>
+</body>
+</html>
