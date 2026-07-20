@@ -1,0 +1,65 @@
+name: Deploy Apps Script DEV
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Branch, tag of commit om naar DEV te sturen
+        required: true
+        default: main
+        type: string
+      description:
+        description: Korte releasebeschrijving
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: apps-script-development
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment: development
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout gekozen versie
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install --ignore-scripts
+
+      - name: Plaats clasp-configuratie
+        env:
+          CLASPRC_JSON: ${{ secrets.CLASPRC_JSON }}
+          CLASP_JSON: ${{ secrets.CLASP_JSON }}
+          DEPLOYMENT_ID: ${{ secrets.APPS_SCRIPT_DEPLOYMENT_ID }}
+        run: |
+          test -n "$CLASPRC_JSON"
+          test -n "$CLASP_JSON"
+          test -n "$DEPLOYMENT_ID"
+          printf '%s' "$CLASPRC_JSON" > "$HOME/.clasprc.json"
+          printf '%s' "$CLASP_JSON" > .clasp.json
+          echo "::add-mask::$DEPLOYMENT_ID"
+
+      - name: Validate
+        run: npm run check
+
+      - name: Deploy naar DEV
+        env:
+          APPS_SCRIPT_DEPLOYMENT_ID: ${{ secrets.APPS_SCRIPT_DEPLOYMENT_ID }}
+        run: node scripts/deploy-apps-script.mjs dev "${{ inputs.description }}"
