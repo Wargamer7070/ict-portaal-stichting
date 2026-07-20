@@ -66,13 +66,35 @@ export function selectClaspProject(environmentInput) {
   return { environment, config, targetPath };
 }
 
-export function localClaspBinary() {
-  const binaryName = process.platform === 'win32' ? 'clasp.cmd' : 'clasp';
-  const binaryPath = path.join(repositoryRoot, 'node_modules', '.bin', binaryName);
-  if (!fs.existsSync(binaryPath)) {
+/**
+ * Start clasp via de geïnstalleerde JavaScript-entrypoint in plaats van via
+ * node_modules/.bin/clasp.cmd. Dat voorkomt spawnSync EINVAL op Windows en
+ * houdt shell-uitvoering uitgeschakeld.
+ */
+export function localClaspInvocation() {
+  const packagePath = path.join(repositoryRoot, 'node_modules', '@google', 'clasp', 'package.json');
+  if (!fs.existsSync(packagePath)) {
     throw new Error('clasp ontbreekt. Voer eerst "npm install" uit.');
   }
-  return binaryPath;
+
+  const packageJson = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
+  const binValue = typeof packageJson.bin === 'string'
+    ? packageJson.bin
+    : packageJson.bin && packageJson.bin.clasp;
+
+  if (!binValue) {
+    throw new Error('De clasp-opstartlocatie ontbreekt in @google/clasp/package.json.');
+  }
+
+  const entryPoint = path.resolve(path.dirname(packagePath), binValue);
+  if (!fs.existsSync(entryPoint)) {
+    throw new Error(`De clasp-opstartlocatie bestaat niet: ${entryPoint}`);
+  }
+
+  return {
+    command: process.execPath,
+    argumentsPrefix: [entryPoint]
+  };
 }
 
 export function deploymentIdFor(environmentInput) {
