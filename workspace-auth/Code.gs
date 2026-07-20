@@ -1,22 +1,3 @@
-const CONFIG = Object.freeze({
-  school: {
-    id: 'vszutphen',
-    name: 'De Vrijeschool Zutphen',
-    domain: 'vszutphen.nl'
-  },
-  groups: {
-    student: 'vsz-leerlingen@vszutphen.nl',
-    staff: 'vsz-medewerkers@vszutphen.nl',
-    teacher: 'vsz-docenten@vszutphen.nl',
-    admin: 'vsz-schoolbeheerders@vszutphen.nl'
-  },
-  publicPortalUrl: 'https://wargamer7070.github.io/ict-portaal-stichting/portalen.html?school=vszutphen',
-  publicManualsUrl: 'https://wargamer7070.github.io/ict-portaal-stichting/handleidingen.html?school=vszutphen',
-  publicStatusUrl: 'https://wargamer7070.github.io/ict-portaal-stichting/status.html?school=vszutphen',
-  cacheSeconds: 60,
-  accessCacheVersion: 'v2'
-});
-
 const ROLE_LABELS = Object.freeze({
   student: 'Leerling',
   staff: 'Medewerker',
@@ -25,24 +6,26 @@ const ROLE_LABELS = Object.freeze({
 });
 
 function doGet(e) {
+  let config = getSafeFallbackConfig_();
   let access;
 
   try {
-    access = resolveCurrentUser_();
+    config = getConfig_();
+    access = resolveCurrentUser_(config);
   } catch (error) {
     console.error(error);
     access = deniedResult_(
       '',
-      'De Workspace-controle kon niet worden uitgevoerd. Probeer het later opnieuw.'
+      'Het portaal is niet volledig geconfigureerd of de Workspace-controle kon niet worden uitgevoerd.'
     );
   }
 
   const requestedView = String((e && e.parameter && e.parameter.view) || '').trim().toLowerCase();
-  const portal = buildPortalModel_(access, requestedView);
+  const portal = buildPortalModel_(access, requestedView, config);
   const template = HtmlService.createTemplateFromFile('Index');
   template.access = access;
   template.portal = portal;
-  template.config = CONFIG;
+  template.config = config;
   template.roleLabels = ROLE_LABELS;
 
   return template.evaluate()
@@ -50,19 +33,19 @@ function doGet(e) {
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.DEFAULT);
 }
 
-function resolveCurrentUser_() {
+function resolveCurrentUser_(config) {
   const email = String(Session.getActiveUser().getEmail() || '').trim().toLowerCase();
   if (!email) {
     return deniedResult_('', 'Geen Workspace-account vastgesteld. Open deze webapp met je schoolaccount.');
   }
 
   const domain = email.split('@')[1] || '';
-  if (domain !== CONFIG.school.domain) {
-    return deniedResult_(email, `Dit account hoort niet bij ${CONFIG.school.domain}.`);
+  if (domain !== config.school.domain) {
+    return deniedResult_(email, `Dit account hoort niet bij ${config.school.domain}.`);
   }
 
   const cache = CacheService.getUserCache();
-  const cacheKey = `access-${CONFIG.accessCacheVersion}-${email}`;
+  const cacheKey = `access-${config.accessCacheVersion}-${email}`;
   const cached = cache.get(cacheKey);
   if (cached) return JSON.parse(cached);
 
@@ -71,10 +54,10 @@ function resolveCurrentUser_() {
   );
 
   const roles = [];
-  if (memberships.has(CONFIG.groups.student)) roles.push('student');
-  if (memberships.has(CONFIG.groups.staff)) roles.push('staff');
-  if (memberships.has(CONFIG.groups.teacher)) roles.push('teacher');
-  if (memberships.has(CONFIG.groups.admin)) roles.push('school_admin');
+  if (memberships.has(config.groups.student)) roles.push('student');
+  if (memberships.has(config.groups.staff)) roles.push('staff');
+  if (memberships.has(config.groups.teacher)) roles.push('teacher');
+  if (memberships.has(config.groups.admin)) roles.push('school_admin');
 
   const elevated = roles.some(role => ['staff', 'teacher', 'school_admin'].includes(role));
   if (elevated && !roles.includes('staff')) roles.push('staff');
@@ -84,14 +67,14 @@ function resolveCurrentUser_() {
         allowed: true,
         reason: '',
         email,
-        schoolId: CONFIG.school.id,
-        schoolName: CONFIG.school.name,
+        schoolId: config.school.id,
+        schoolName: config.school.name,
         roles,
         elevated
       }
     : deniedResult_(email, 'Je account staat niet in een toegestane groep.');
 
-  cache.put(cacheKey, JSON.stringify(result), CONFIG.cacheSeconds);
+  cache.put(cacheKey, JSON.stringify(result), config.cacheSeconds);
   return result;
 }
 
@@ -107,7 +90,7 @@ function deniedResult_(email, reason) {
   };
 }
 
-function buildPortalModel_(access, requestedView) {
+function buildPortalModel_(access, requestedView, config) {
   if (!access.allowed) return null;
 
   const views = [
@@ -121,7 +104,7 @@ function buildPortalModel_(access, requestedView) {
   const allowedViewIds = views.map(view => view.id);
   const defaultView = access.elevated ? 'staff' : 'student';
   const activeView = allowedViewIds.includes(requestedView) ? requestedView : defaultView;
-  const content = getPortalContent_()[activeView];
+  const content = getPortalContent_(config)[activeView];
 
   return {
     activeView,
@@ -133,12 +116,12 @@ function buildPortalModel_(access, requestedView) {
   };
 }
 
-function getPortalContent_() {
+function getPortalContent_(config) {
   return {
     student: {
       eyebrow: 'Beveiligde leerlingomgeving',
       title: 'Leerlingenportaal',
-      intro: 'Je ziet hier alleen informatie voor leerlingen van De Vrijeschool Zutphen.',
+      intro: `Je ziet hier alleen informatie voor leerlingen van ${config.school.name}.`,
       sections: [
         {
           id: 'student-test',
@@ -153,16 +136,16 @@ function getPortalContent_() {
             },
             {
               title: 'Openbare handleidingen',
-              text: 'Open de algemene ICT-handleidingen voor De Vrijeschool Zutphen.',
+              text: `Open de algemene ICT-handleidingen voor ${config.school.name}.`,
               badge: 'Openbaar',
-              url: CONFIG.publicManualsUrl,
+              url: config.publicManualsUrl,
               external: true
             },
             {
               title: 'Dienststatus',
               text: 'Bekijk bekende storingen en onderhoud aan ICT-diensten.',
               badge: 'Openbaar',
-              url: CONFIG.publicStatusUrl,
+              url: config.publicStatusUrl,
               external: true
             }
           ]
