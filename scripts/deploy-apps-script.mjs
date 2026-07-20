@@ -2,19 +2,24 @@ import { spawnSync } from 'node:child_process';
 import {
   deploymentIdFor,
   loadDotEnv,
-  localClaspBinary,
+  localClaspInvocation,
   normalizeEnvironment,
   repositoryRoot,
   selectClaspProject
 } from './lib/clasp-config.mjs';
 
 function runClasp(argumentsList, options = {}) {
-  const result = spawnSync(localClaspBinary(), argumentsList, {
-    cwd: repositoryRoot,
-    encoding: options.capture ? 'utf8' : undefined,
-    stdio: options.capture ? ['ignore', 'pipe', 'pipe'] : 'inherit',
-    shell: false
-  });
+  const invocation = localClaspInvocation();
+  const result = spawnSync(
+    invocation.command,
+    [...invocation.argumentsPrefix, ...argumentsList],
+    {
+      cwd: repositoryRoot,
+      encoding: options.capture ? 'utf8' : undefined,
+      stdio: options.capture ? ['ignore', 'pipe', 'pipe'] : 'inherit',
+      shell: false
+    }
+  );
 
   if (result.error) throw result.error;
   if (result.status !== 0) {
