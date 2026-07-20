@@ -4,3 +4,12 @@ Thumbs.db
 .idea/
 __pycache__/
 *.pyc
+
+# Node en clasp
+node_modules/
+.clasprc.json
+.clasp.json
+.clasp.dev.json
+.clasp.prod.json
+.env.clasp
+npm-debug.log*
