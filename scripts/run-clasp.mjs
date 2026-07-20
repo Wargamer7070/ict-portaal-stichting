@@ -1,6 +1,6 @@
 import { spawnSync } from 'node:child_process';
 import {
-  localClaspBinary,
+  localClaspInvocation,
   normalizeEnvironment,
   repositoryRoot,
   selectClaspProject
@@ -15,11 +15,16 @@ try {
   }
 
   selectClaspProject(environment);
-  const result = spawnSync(localClaspBinary(), claspArguments, {
-    cwd: repositoryRoot,
-    stdio: 'inherit',
-    shell: false
-  });
+  const invocation = localClaspInvocation();
+  const result = spawnSync(
+    invocation.command,
+    [...invocation.argumentsPrefix, ...claspArguments],
+    {
+      cwd: repositoryRoot,
+      stdio: 'inherit',
+      shell: false
+    }
+  );
 
   if (result.error) throw result.error;
   process.exit(result.status ?? 1);
