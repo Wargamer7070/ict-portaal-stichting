@@ -1,0 +1,28 @@
+{
+  "name": "ict-portaal-stichting",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Stichtingbreed ICT-portaal met GitHub Pages en Google Apps Script.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "check": "python scripts/validate_site.py && node scripts/validate-apps-script.mjs",
+    "check:apps-script": "node scripts/validate-apps-script.mjs",
+    "clasp:login": "clasp login",
+    "status:dev": "node scripts/run-clasp.mjs dev show-file-status",
+    "status:prod": "node scripts/run-clasp.mjs prod show-file-status",
+    "pull:dev": "node scripts/run-clasp.mjs dev pull",
+    "push:dev": "node scripts/run-clasp.mjs dev push",
+    "push:dev:force": "node scripts/run-clasp.mjs dev push --force",
+    "watch:dev": "node scripts/run-clasp.mjs dev push --watch",
+    "open:dev": "node scripts/run-clasp.mjs dev open-script",
+    "deployments:dev": "node scripts/run-clasp.mjs dev list-deployments",
+    "deployments:prod": "node scripts/run-clasp.mjs prod list-deployments",
+    "deploy:dev": "node scripts/deploy-apps-script.mjs dev",
+    "deploy:prod": "node scripts/deploy-apps-script.mjs prod"
+  },
+  "devDependencies": {
+    "@google/clasp": "3.3.0"
+  }
+}
