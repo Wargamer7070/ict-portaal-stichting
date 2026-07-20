@@ -10,16 +10,37 @@ De webapp:
 - levert alleen inhoud terug die bij het beveiligingsniveau hoort;
 - toont leerlingen en medewerkers ieder een eigen scherm.
 
-## Groepen
+## Bestanden
 
-Controleer bovenaan `Code.gs` deze adressen:
+- `Code.gs`: autorisatie, rollen en server-side inhoudsfiltering.
+- `Config.gs`: leest en valideert Script Properties.
+- `Index.html`: beveiligde interface.
+- `appsscript.json`: runtime en minimale OAuth-scopes.
 
-- `vsz-leerlingen@vszutphen.nl`
-- `vsz-medewerkers@vszutphen.nl`
-- `vsz-docenten@vszutphen.nl`
-- `vsz-schoolbeheerders@vszutphen.nl`
+## Configuratie
 
-Gebruik directe groepsleden. Lidmaatschap via een onderliggende groep telt niet mee binnen deze opzet.
+Groepsadressen en schoolspecifieke URL's staan niet in de code. Stel ze één keer per DEV- of PROD-project in via **Projectinstellingen → Script Properties**.
+
+Verplichte properties:
+
+- `ENVIRONMENT`
+- `SCHOOL_ID`
+- `SCHOOL_NAME`
+- `SCHOOL_DOMAIN`
+- `GROUP_STUDENT`
+- `GROUP_STAFF`
+- `GROUP_TEACHER`
+- `GROUP_ADMIN`
+- `PUBLIC_PORTAL_URL`
+- `PUBLIC_MANUALS_URL`
+- `PUBLIC_STATUS_URL`
+
+Optioneel:
+
+- `CACHE_SECONDS`, standaard `60`;
+- `ACCESS_CACHE_VERSION`, standaard `v1`.
+
+Voer `getConfigurationStatus()` uit in de Apps Script-editor om de configuratie te controleren. Voer `bumpAccessCacheVersion()` uit wanneer je na groepswijzigingen direct een nieuwe autorisatiecontrole wilt afdwingen.
 
 ## Rollenmodel
 
@@ -36,33 +57,20 @@ Docenten en medewerkers delen hetzelfde beveiligingsniveau. De inhoudscategorie�
 
 `buildPortalModel_()` bepaalt welke weergave de gebruiker ontvangt.
 
-Een leerling ontvangt alleen het model voor `student`. Medewerkers- en docentengegevens staan bij een leerling dus niet verborgen in de HTML. De server stuurt deze gegevens niet naar de browser.
+Een leerling ontvangt alleen het model voor `student`. Medewerkers- en docentengegevens staan niet verborgen in de HTML; de server stuurt deze gegevens niet naar de browser.
 
-Een medewerker, docent of schoolbeheerder ontvangt:
+## Bijwerken
 
-- de medewerkersweergave;
-- de docentencategorie;
-- toegang tot de leerlingenweergave.
+Gebruik voortaan `clasp` vanuit de repository:
 
-## Apps Script bijwerken
+```powershell
+npm run push:dev
+npm run deploy:dev
+```
 
-1. Open het bestaande project `ICT-portaal Workspace-test`.
-2. Vervang `Code.gs` door `workspace-auth/Code.gs` uit deze branch.
-3. Vervang `Index.html` door `workspace-auth/Index.html` uit deze branch.
-4. Sla beide bestanden op.
-5. Kies **Implementeren → Implementaties beheren**.
-6. Open de bestaande webapp-implementatie.
-7. Kies **Bewerken**.
-8. Kies bij versie **Nieuwe versie**.
-9. Laat **Uitvoeren als: gebruiker die de web-app opent** staan.
-10. Laat toegang beperkt tot jullie Workspace-domein.
-11. Klik op **Implementeren**.
-
-De bestaande `/exec`-URL blijft bij een nieuwe versie gelijk.
+Voor GitHub Actions en productie-uitrol lees je [`docs/CLASP-WERKWIJZE.md`](../docs/CLASP-WERKWIJZE.md).
 
 ## Testmatrix
-
-Test na iedere implementatie minimaal deze vier situaties:
 
 | Test | Verwacht resultaat |
 |---|---|
@@ -72,13 +80,7 @@ Test na iedere implementatie minimaal deze vier situaties:
 | Medewerker opent `?view=student` | Leerlingenportaal |
 | Account zonder groep | Geen toegang |
 
-Controleer bij de leerlingtest ook de paginabron en browsertools. Teksten als `Medewerkerstoegang werkt` en `Docentencategorie werkt` horen daar niet in voor te komen.
-
-## Huidige inhoud
-
-De huidige kaarten bevatten veilige testinhoud en openbare koppelingen. Plaats nog geen echte medewerkersinformatie in de openbare GitHub-repository.
-
-De volgende inhoudsfase hoort gegevens uit een beveiligde bron binnen Google Workspace te lezen, bijvoorbeeld afzonderlijke Drive-mappen of gegevensbronnen met passende groepsrechten.
+Controleer bij de leerlingtest ook de paginabron. Teksten als `Medewerkerstoegang werkt` en `Docentencategorie werkt` horen daar niet in voor te komen.
 
 ## Beveiligingsgrens
 
