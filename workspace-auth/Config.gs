@@ -130,9 +130,11 @@ function getConfigurationStatus() {
 
 function bumpAccessCacheVersion() {
   const version = `v${Date.now()}`;
+
   PropertiesService.getScriptProperties().setProperty(
     CONFIG_PROPERTY_NAMES.accessCacheVersion,
     version
   );
+
   return version;
 }
