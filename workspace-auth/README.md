@@ -1,66 +1,96 @@
-# Google Workspace-verificatie testen
+# Google Workspace-portaal voor De Vrijeschool Zutphen
 
-Deze test gebruikt een aparte Google Apps Script-webapp. GitHub Pages blijft openbaar. De Apps Script-webapp stelt het actieve Workspace-account vast en leest alleen de Google-groepen waarvan deze gebruiker lid is.
+Deze Google Apps Script-webapp vormt de beveiligde toegangspoort naast de openbare GitHub Pages-website.
 
-## Standaard testgroepen
+De webapp:
 
-Maak in Google Admin of Google Groups deze groepen aan, of pas de adressen bovenaan `Code.gs` aan:
+- stelt het actieve Workspace-account vast;
+- controleert directe Google-groepslidmaatschappen;
+- kent school- en applicatierollen toe;
+- levert alleen inhoud terug die bij het beveiligingsniveau hoort;
+- toont leerlingen en medewerkers ieder een eigen scherm.
 
-- `vsz-leerlingen@vszutphen.nl`
-- `vsz-medewerkers@vszutphen.nl`
-- `vsz-docenten@vszutphen.nl`
-- `vsz-schoolbeheerders@vszutphen.nl`
+## Bestanden
 
-Voeg minimaal één leerlingtestaccount en één medewerkerstestaccount toe.
+- `Code.gs`: autorisatie, rollen en server-side inhoudsfiltering.
+- `Config.gs`: leest en valideert Script Properties.
+- `Index.html`: beveiligde interface.
+- `appsscript.json`: runtime en minimale OAuth-scopes.
 
-## Apps Script aanmaken
+## Configuratie
 
-1. Open `script.google.com` met een beheeraccount binnen `vszutphen.nl`.
-2. Maak een nieuw project met de naam `ICT-portaal Workspace-test`.
-3. Vervang de inhoud van `Code.gs` door `workspace-auth/Code.gs` uit deze repository.
-4. Voeg een HTML-bestand met de naam `Index` toe en plak `workspace-auth/Index.html`.
-5. Open **Projectinstellingen** en schakel **Manifestbestand appsscript.json weergeven in editor** in.
-6. Vervang het manifest door `workspace-auth/appsscript.json`.
-7. Controleer in `Code.gs` het schooldomein en de vier groepsadressen.
+Groepsadressen en schoolspecifieke URL's staan niet in de code. Stel ze één keer per DEV- of PROD-project in via **Projectinstellingen → Script Properties**.
 
-## Testdeployment
+Verplichte properties:
 
-1. Kies **Implementeren → Nieuwe implementatie**.
-2. Kies type **Web-app**.
-3. Gebruik als beschrijving `Workspace verificatietest`.
-4. Kies bij uitvoeren als: **Gebruiker die de web-app opent**.
-5. Kies bij toegang: alleen gebruikers binnen jullie Google Workspace-domein.
-6. Implementeer en kopieer de `/exec`-URL.
-7. Open de URL eerst zelf en geef toestemming voor het lezen van je account-e-mailadres en groepslidmaatschappen.
+- `ENVIRONMENT`
+- `SCHOOL_ID`
+- `SCHOOL_NAME`
+- `SCHOOL_DOMAIN`
+- `GROUP_STUDENT`
+- `GROUP_STAFF`
+- `GROUP_TEACHER`
+- `GROUP_ADMIN`
+- `PUBLIC_PORTAL_URL`
+- `PUBLIC_MANUALS_URL`
+- `PUBLIC_STATUS_URL`
 
-## GitHub-site koppelen
+Optioneel:
 
-Plaats de `/exec`-URL in `data/workspace-auth.json`:
+- `CACHE_SECONDS`, standaard `60`;
+- `ACCESS_CACHE_VERSION`, standaard `v1`.
 
-```json
-{
-  "mode": "apps-script",
-  "webAppUrl": "https://script.google.com/a/macros/vszutphen.nl/s/IMPLEMENTATIE-ID/exec",
-  "enabledSchools": ["vszutphen"],
-  "testDomain": "vszutphen.nl",
-  "cacheSeconds": 60,
-  "status": "test"
-}
+Voer `getConfigurationStatus()` uit in de Apps Script-editor om de configuratie te controleren. Voer `bumpAccessCacheVersion()` uit wanneer je na groepswijzigingen direct een nieuwe autorisatiecontrole wilt afdwingen.
+
+## Rollenmodel
+
+| Workspace-groep | Applicatierollen | Toegang |
+|---|---|---|
+| Leerlingen | `student` | Alleen leerlingenweergave |
+| Medewerkers | `staff` | Medewerkers- en leerlingenweergave |
+| Docenten | `teacher`, `staff` | Medewerkers- en leerlingenweergave |
+| Schoolbeheerders | `school_admin`, `staff` | Medewerkers- en leerlingenweergave |
+
+Docenten en medewerkers delen hetzelfde beveiligingsniveau. De inhoudscategorieën **Medewerkers** en **Docenten** blijven apart.
+
+## Server-side scheiding
+
+`buildPortalModel_()` bepaalt welke weergave de gebruiker ontvangt.
+
+Een leerling ontvangt alleen het model voor `student`. Medewerkers- en docentengegevens staan niet verborgen in de HTML; de server stuurt deze gegevens niet naar de browser.
+
+## Bijwerken
+
+Gebruik voortaan `clasp` vanuit de repository:
+
+```powershell
+npm run push:dev
+npm run deploy:dev
 ```
 
-Na samenvoegen naar `main` publiceert GitHub Pages de wijziging automatisch.
+Voor GitHub Actions en productie-uitrol lees je [`docs/CLASP-WERKWIJZE.md`](../docs/CLASP-WERKWIJZE.md).
 
-## Verwachte testuitkomsten
+## Testmatrix
 
-| Account | Groepen | Verwachte rollen |
-|---|---|---|
-| Leerlingtest | leerlingen | `student` |
-| Medewerkertest | medewerkers | `staff` |
-| Docenttest | docenten | `teacher`, `staff` |
-| Schoolbeheerder | schoolbeheerders | `school_admin`, `staff` |
-| Account buiten domein | geen | geen toegang |
-| Domeinaccount zonder groep | geen | geen toegang |
+| Test | Verwacht resultaat |
+|---|---|
+| Leerling opent standaard-URL | Leerlingenportaal |
+| Leerling opent `?view=staff` | Leerlingenportaal; geen medewerkersinhoud |
+| Medewerker opent standaard-URL | Medewerkersportaal |
+| Medewerker opent `?view=student` | Leerlingenportaal |
+| Account zonder groep | Geen toegang |
+
+Controleer bij de leerlingtest ook de paginabron. Teksten als `Medewerkerstoegang werkt` en `Docentencategorie werkt` horen daar niet in voor te komen.
 
 ## Beveiligingsgrens
 
-De GitHub-repository bevat geen afgeschermde documenten. De Apps Script-webapp toont in deze test alleen de vastgestelde school en rollen. Plaats medewerkersinhoud pas achter deze webapp of achter een latere backend die dezelfde controle bij ieder verzoek uitvoert.
+GitHub Pages blijft volledig openbaar. Alleen de Apps Script-webapp vormt de afgeschermde omgeving.
+
+Plaats nooit in GitHub:
+
+- persoonsgegevens;
+- medewerkersdocumenten;
+- wachtwoorden;
+- OAuth-geheimen;
+- serviceaccount-sleutels;
+- interne links die niet openbaar mogen worden.
